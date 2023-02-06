@@ -8,8 +8,14 @@ void main() {
     theme: ThemeData(
       iconTheme: IconThemeData(color: Colors.orange),
       appBarTheme: AppBarTheme(
+        titleTextStyle: TextStyle(
+          fontSize: 25
+        ),
         color: Colors.white,
-        iconTheme: IconThemeData(color: Colors.red)
+        actionsIconTheme: IconThemeData(
+          color: Colors.grey.shade700,
+          size: 40
+        )
       ),
       textTheme: TextTheme(
         bodyText2: TextStyle(
@@ -35,8 +41,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.star),
-        title: Text('study_flutter_2'),
+        title: Text('Instagram', style: TextStyle(
+          color: Colors.black
+        ),),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: Icon(Icons.add_box_outlined),
+          )
+        ],
       ),
       body: Container(
         child: Column(
