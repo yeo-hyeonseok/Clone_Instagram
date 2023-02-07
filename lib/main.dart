@@ -27,7 +27,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var tabContents = [Home(), Shop()];
+  var tabs = [Home(), Shop()];
   var currentTabIndex = 0;
 
   void setCurrentTabIndex(int index) {
@@ -51,8 +51,9 @@ class _MyAppState extends State<MyApp> {
           )
         ],
       ),
-      body: Container(
-          child: tabContents[currentTabIndex]
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+          child: tabs[currentTabIndex]
         ),
       // 플러터에서 탭 구현하기
       bottomNavigationBar: BottomNavigationBar(
@@ -72,13 +73,61 @@ class _MyAppState extends State<MyApp> {
 }
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Text('home');
+    return ListView.builder(
+      itemCount: 3,
+      itemBuilder: (context, index) => Container(
+        margin: EdgeInsets.fromLTRB(0, 25, 0, 0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade300,
+              offset: Offset(0, 0.5), //(x,y)
+              blurRadius: 6.0,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Image.asset('images/sample.jpg'),
+            Padding(padding: EdgeInsets.fromLTRB(10, 15, 10, 15), child: Column(
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                        padding: EdgeInsets.zero, // 패딩 설정
+                        constraints: BoxConstraints(),
+                        onPressed: (){},
+                        icon: Icon(Icons.favorite, color: Colors.red, size: 20,)),
+                    Text('100', style: TextStyle(
+                      fontWeight: FontWeight.bold
+                    ),)
+                  ],
+                ),
+               Container(
+                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                 child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.stretch,
+                   children: [
+                     Text('글쓴이'),
+                     Text('내용')
+                   ],
+                 ),
+               ),
+              ],
+            ),)
+          ],
+        ),
+      )
+    );
   }
 }
+
+
 
 class Shop extends StatelessWidget {
   const Shop({Key? key}) : super(key: key);
