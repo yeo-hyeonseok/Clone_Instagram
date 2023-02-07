@@ -5,37 +5,17 @@ import 'package:flutter/material.dart';
 var _value = 'do not use';
 
 var theme = ThemeData(
-    iconTheme: IconThemeData(
-      color: Colors.black,
-      size: 20
-    ),
     appBarTheme: AppBarTheme(
       titleTextStyle: TextStyle(
-          fontSize: 25
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
       ),
       color: Colors.white,
     ),
-    bottomAppBarTheme: BottomAppBarTheme(
-
-    ),
-    textTheme: TextTheme(
-        bodyText1: TextStyle(
-          color: Colors.red,
-          fontSize: 30
-        ),
-        bodyText2: TextStyle(
-          color: Colors.grey.shade600,
-          fontSize: 30
-        )
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        backgroundColor: Colors.orange
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+      selectedIconTheme: IconThemeData(
+        color: Colors.pinkAccent
       )
     ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-
-      )
-    )
 );

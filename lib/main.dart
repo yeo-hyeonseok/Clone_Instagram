@@ -19,40 +19,49 @@ var textStyle = TextStyle(
   fontSize: 18
 );
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var tabContents = [Home(), Shop()];
+  var currentTabIndex = 0;
+
+  void setCurrentTabIndex(int index) {
+    setState(() {
+      currentTabIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Instagram', style: TextStyle(
-          color: Colors.black
-        ),),
+        title: Text('Instagram'),
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
             child: IconButton(
               onPressed: (){},
-              icon: Icon(Icons.add_box_outlined, color: Colors.grey.shade800, size: 35,),
+              icon: Icon(Icons.add_box_outlined, color: Colors.black, size: 30,),
             ),
           )
         ],
       ),
       body: Container(
-          child: Column(
-            children: [
-              Icon(Icons.star),
-              // 원하는 ThemeData의 내용을 불러오려면 Theme.of
-              Text('ㅋㅋ', style: Theme.of(context).textTheme.bodyText1,),
-              Text('ㅋㅋ', style: Theme.of(context).textTheme.bodyText2,),
-              TextButton(onPressed: (){}, child: Text('ㅋ'))
-            ],
-          ),
+          child: tabContents[currentTabIndex]
         ),
+      // 플러터에서 탭 구현하기
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
+        // onPressed랑 똑같음
+        onTap: (index){
+          setCurrentTabIndex(index);
+        },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: '홈'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: '샵'),
@@ -61,6 +70,27 @@ class MyApp extends StatelessWidget {
       );
   }
 }
+
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text('home');
+  }
+}
+
+class Shop extends StatelessWidget {
+  const Shop({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text('shop');
+  }
+}
+
+
+
 
 
 
