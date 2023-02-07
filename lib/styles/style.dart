@@ -5,12 +5,18 @@ import 'package:flutter/material.dart';
 var _value = 'do not use';
 
 var theme = ThemeData(
-    iconTheme: IconThemeData(color: Colors.orange),
+    iconTheme: IconThemeData(
+      color: Colors.black,
+      size: 20
+    ),
     appBarTheme: AppBarTheme(
       titleTextStyle: TextStyle(
           fontSize: 25
       ),
       color: Colors.white,
+    ),
+    bottomAppBarTheme: BottomAppBarTheme(
+
     ),
     textTheme: TextTheme(
         bodyText1: TextStyle(

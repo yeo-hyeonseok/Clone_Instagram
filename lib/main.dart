@@ -50,7 +50,27 @@ class MyApp extends StatelessWidget {
             ],
           ),
         ),
+      bottomNavigationBar: BottomAppBar(child: MainBottom()),
       );
   }
 }
+
+class MainBottom extends StatelessWidget {
+  MainBottom({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.home_outlined)),
+          IconButton(onPressed: (){}, icon: Icon(Icons.shopping_bag_outlined)),
+        ],
+      ),
+    );
+  }
+}
+
 
