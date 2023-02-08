@@ -23,12 +23,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var tabs = [Home(), Shop()];
   var currentTabIndex = 0;
+  var posts = [];
 
   void setCurrentTabIndex(int index) {
     setState(() {
       currentTabIndex = index;
+    });
+  }
+  void setPosts(data) {
+    setState(() {
+      posts = data;
     });
   }
 
@@ -44,13 +49,15 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  getDummyData() async {
+  getPosts() async {
     // 플러터에서 http 통신하는 법
     // 얘도 Future를 반환하는 함수임
     var result = await http.get(Uri.parse('https://codingapple1.github.io/app/data.json'));
 
     if (result.statusCode == 200) {
-      print(jsonDecode(result.body));
+      setPosts(jsonDecode(result.body));
+      print(posts);
+
     } else {
       showToast();
       throw Exception('요청 실패');
@@ -64,7 +71,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    getDummyData();
+    getPosts();
   }
 
   @override
@@ -86,7 +93,7 @@ class _MyAppState extends State<MyApp> {
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-          child: tabs[currentTabIndex]
+          child: [Home(posts:posts), Shop()][currentTabIndex]
         ),
       // 플러터에서 탭 구현하기
       bottomNavigationBar: BottomNavigationBar(
@@ -106,14 +113,16 @@ class _MyAppState extends State<MyApp> {
 }
 
 class Home extends StatelessWidget {
-  Home({Key? key}) : super(key: key);
+  Home({Key? key, this.posts}) : super(key: key);
+
+  final posts;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 3,
+      itemCount: posts.length,
       itemBuilder: (context, index) => Container(
-        margin: EdgeInsets.fromLTRB(0, 25, 0, 0),
+        margin: index + 1 == posts.length ? EdgeInsets.fromLTRB(0, 25, 0, 25) : EdgeInsets.fromLTRB(0, 25, 0, 0),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -126,7 +135,7 @@ class Home extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Image.asset('assets/images/sample.jpg'),
+            Image.network(posts[index]['image'],width: double.infinity, height: 280, fit: BoxFit.cover,),
             Padding(padding: EdgeInsets.fromLTRB(10, 15, 10, 15), child: Column(
               children: [
                 Row(
@@ -136,18 +145,22 @@ class Home extends StatelessWidget {
                         constraints: BoxConstraints(),
                         onPressed: (){},
                         icon: Icon(Icons.favorite, color: Colors.red, size: 20,)),
-                    Text('100', style: TextStyle(
+                    Text('${posts[index]['likes']}', style: TextStyle(
                       fontWeight: FontWeight.bold
                     ),)
                   ],
                 ),
-               Padding(
+               Container(
+                 height: 60,
                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                  child: Column(
+                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                    crossAxisAlignment: CrossAxisAlignment.stretch,
                    children: [
-                     Text('글쓴이'),
-                     Text('내용')
+                     Text('${posts[index]['user']}', style: TextStyle(
+                       fontWeight: FontWeight.bold
+                     ),),
+                     Text('${posts[index]['content']}')
                    ],
                  ),
                ),
