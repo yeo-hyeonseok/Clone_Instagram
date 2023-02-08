@@ -9,6 +9,7 @@ var theme = ThemeData(
       titleTextStyle: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
+        color: Colors.black
       ),
       color: Colors.white,
     ),

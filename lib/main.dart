@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 // 변수 중복 문제를 피하고 싶다면 as 키워드 사용하셈
 import 'package:study_flutter_2/styles/style.dart' as style;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MaterialApp(
@@ -11,13 +13,6 @@ void main() {
     home: MyApp(),
   ));
 }
-
-// 몇몇 요소의 경우 그냥 변수로 만들어 놨다가 사용하는 것도 나쁘지 않을지도 (특히 글자)
-var textStyle = TextStyle(
-  color: Colors.grey.shade600,
-  fontWeight: FontWeight.bold,
-  fontSize: 18
-);
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -36,11 +31,30 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  getDummyData() async {
+    // 플러터에서 http 통신하는 법
+    // 얘도 Future를 반환하는 함수임
+    var response = await http.get(Uri.parse('https://codingapple1.github.io/app/data.json'));
+    print(jsonDecode(response.body));
+  }
+  
+  // 위젯이 로드되면 동작할 내용 작성
+  // initState 안에서는 async await 사용 불가
+  // 쓰려면 따로 함수로 빼줘야 함
+  @override
+  void initState() {
+    super.initState();
+
+    getDummyData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Instagram'),
+        title: Text('Instagram', style: TextStyle(
+          color: Colors.black
+        ),),
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -93,7 +107,7 @@ class Home extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Image.asset('images/sample.jpg'),
+            Image.asset('assets/images/sample.jpg'),
             Padding(padding: EdgeInsets.fromLTRB(10, 15, 10, 15), child: Column(
               children: [
                 Row(
@@ -108,8 +122,8 @@ class Home extends StatelessWidget {
                     ),)
                   ],
                 ),
-               Container(
-                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+               Padding(
+                 padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                  child: Column(
                    crossAxisAlignment: CrossAxisAlignment.stretch,
                    children: [
@@ -126,8 +140,6 @@ class Home extends StatelessWidget {
     );
   }
 }
-
-
 
 class Shop extends StatelessWidget {
   const Shop({Key? key}) : super(key: key);
