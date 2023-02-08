@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:study_flutter_2/styles/style.dart' as style;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -31,11 +32,29 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void showToast() {
+    Fluttertoast.showToast(
+        msg: "데이터 요청 실패",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.redAccent,
+        textColor: Colors.white,
+        fontSize: 14.0
+    );
+  }
+
   getDummyData() async {
     // 플러터에서 http 통신하는 법
     // 얘도 Future를 반환하는 함수임
-    var response = await http.get(Uri.parse('https://codingapple1.github.io/app/data.json'));
-    print(jsonDecode(response.body));
+    var result = await http.get(Uri.parse('https://codingapple1.github.io/app/data.json'));
+
+    if (result.statusCode == 200) {
+      print(jsonDecode(result.body));
+    } else {
+      showToast();
+      throw Exception('요청 실패');
+    }
   }
   
   // 위젯이 로드되면 동작할 내용 작성
