@@ -52,12 +52,11 @@ class _MyAppState extends State<MyApp> {
   getPosts() async {
     // 플러터에서 http 통신하는 법
     // 얘도 Future를 반환하는 함수임
+    // http 말고 dio 패키지도 한번 써보셈, 예외처리 하기 쉬움
     var result = await http.get(Uri.parse('https://codingapple1.github.io/app/data.json'));
 
     if (result.statusCode == 200) {
       setPosts(jsonDecode(result.body));
-      print(posts);
-
     } else {
       showToast();
       throw Exception('요청 실패');
@@ -119,57 +118,65 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: posts.length,
-      itemBuilder: (context, index) => Container(
-        margin: index + 1 == posts.length ? EdgeInsets.fromLTRB(0, 25, 0, 25) : EdgeInsets.fromLTRB(0, 25, 0, 0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade300,
-              offset: Offset(0, 0.5), //(x,y)
-              blurRadius: 6.0,
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Image.network(posts[index]['image'],width: double.infinity, height: 280, fit: BoxFit.cover,),
-            Padding(padding: EdgeInsets.fromLTRB(10, 15, 10, 15), child: Column(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                        padding: EdgeInsets.zero, // 패딩 설정
-                        constraints: BoxConstraints(),
-                        onPressed: (){},
-                        icon: Icon(Icons.favorite, color: Colors.red, size: 20,)),
-                    Text('${posts[index]['likes']}', style: TextStyle(
-                      fontWeight: FontWeight.bold
-                    ),)
-                  ],
+    // 리스트가 비었는지 안 비었는지 검사
+    if(posts.isNotEmpty) {
+      return ListView.builder(
+          itemCount: posts.length,
+          itemBuilder: (context, index) => Container(
+            margin: index + 1 == posts.length ? EdgeInsets.fromLTRB(0, 25, 0, 25) : EdgeInsets.fromLTRB(0, 25, 0, 0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade300,
+                  offset: Offset(0, 0.5), //(x,y)
+                  blurRadius: 6.0,
                 ),
-               Container(
-                 height: 60,
-                 padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                 child: Column(
-                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                   children: [
-                     Text('${posts[index]['user']}', style: TextStyle(
-                       fontWeight: FontWeight.bold
-                     ),),
-                     Text('${posts[index]['content']}')
-                   ],
-                 ),
-               ),
               ],
-            ),)
-          ],
-        ),
-      )
-    );
+            ),
+            child: Column(
+              children: [
+                Image.network(posts[index]['image'],width: double.infinity, height: 280, fit: BoxFit.cover,),
+                Padding(padding: EdgeInsets.fromLTRB(10, 15, 10, 15), child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                            padding: EdgeInsets.zero, // 패딩 설정
+                            constraints: BoxConstraints(),
+                            onPressed: (){},
+                            icon: Icon(Icons.favorite, color: Colors.red, size: 20,)),
+                        Text('${posts[index]['likes']}', style: TextStyle(
+                            fontWeight: FontWeight.bold
+                        ),)
+                      ],
+                    ),
+                    Container(
+                      height: 60,
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text('${posts[index]['user']}', style: TextStyle(
+                              fontWeight: FontWeight.bold
+                          ),),
+                          Text('${posts[index]['content']}')
+                        ],
+                      ),
+                    ),
+                  ],
+                ),)
+              ],
+            ),
+          )
+      );
+    } else {
+      return Center(child: CircularProgressIndicator(
+        color: Colors.redAccent,
+      ));
+    }
+
   }
 }
 
