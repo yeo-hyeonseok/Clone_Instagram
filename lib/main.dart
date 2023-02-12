@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-// 변수 중복 문제를 피하고 싶다면 as 키워드 사용하셈
 import 'package:study_flutter_2/styles/style.dart' as style;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/rendering.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -111,19 +111,44 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   Home({Key? key, this.posts}) : super(key: key);
 
   final posts;
 
   @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  // 스크롤 관련 정보를 가지고 있는 클래스
+  var scroll = ScrollController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // 왼쪽의 변수가 변할 때마다 특정 코드를 실행시키고 싶다면 리스너 사용하셈
+    scroll.addListener(() {
+      // 사용자의 스크롤 방향
+      print(scroll.position.userScrollDirection);
+      
+      if(scroll.position.pixels == scroll.position.maxScrollExtent) {
+        print('끝임 ㅋ');
+      }
+    });
+  }
+  
+  @override
   Widget build(BuildContext context) {
     // 리스트가 비었는지 안 비었는지 검사
-    if(posts.isNotEmpty) {
+    if(widget.posts.isNotEmpty) {
       return ListView.builder(
-          itemCount: posts.length,
+          controller: scroll,
+          itemCount: widget.posts.length,
           itemBuilder: (context, index) => Container(
-            margin: index + 1 == posts.length ? EdgeInsets.fromLTRB(0, 25, 0, 25) : EdgeInsets.fromLTRB(0, 25, 0, 0),
+            margin: index + 1 == widget.posts.length ? EdgeInsets.fromLTRB(0, 25, 0, 25) : EdgeInsets.fromLTRB(0, 25, 0, 0),
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -136,7 +161,7 @@ class Home extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Image.network(posts[index]['image'],width: double.infinity, height: 280, fit: BoxFit.cover,),
+                Image.network(widget.posts[index]['image'],width: double.infinity, height: 280, fit: BoxFit.cover,),
                 Padding(padding: EdgeInsets.fromLTRB(10, 15, 10, 15), child: Column(
                   children: [
                     Row(
@@ -146,7 +171,7 @@ class Home extends StatelessWidget {
                             constraints: BoxConstraints(),
                             onPressed: (){},
                             icon: Icon(Icons.favorite, color: Colors.red, size: 20,)),
-                        Text('${posts[index]['likes']}', style: TextStyle(
+                        Text('${widget.posts[index]['likes']}', style: TextStyle(
                             fontWeight: FontWeight.bold
                         ),)
                       ],
@@ -158,10 +183,10 @@ class Home extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text('${posts[index]['user']}', style: TextStyle(
+                          Text('${widget.posts[index]['user']}', style: TextStyle(
                               fontWeight: FontWeight.bold
                           ),),
-                          Text('${posts[index]['content']}')
+                          Text('${widget.posts[index]['content']}')
                         ],
                       ),
                     ),
