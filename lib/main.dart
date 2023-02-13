@@ -26,17 +26,20 @@ class _MyAppState extends State<MyApp> {
   var currentTabIndex = 0;
   var posts = [];
   var isScrollForward = true;
+  var requestCount = 0;
 
   void setCurrentTabIndex(int index) {
     setState(() {
       currentTabIndex = index;
     });
   }
+
   void setPosts(data) {
     setState(() {
       posts = data;
     });
   }
+
   void setIsScrollForward(String direction) {
     setState(() {
       if(direction == 'ScrollDirection.forward') {
@@ -47,9 +50,9 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void showToast() {
+  void showToast(String text) {
     Fluttertoast.showToast(
-        msg: "데이터 요청 실패",
+        msg: text,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -68,7 +71,23 @@ class _MyAppState extends State<MyApp> {
     if (result.statusCode == 200) {
       setPosts(jsonDecode(result.body));
     } else {
-      showToast();
+      showToast('데이터 요청 실패');
+      throw Exception('요청 실패');
+    }
+  }
+
+  getMorePosts() async {
+    setState(() {
+      requestCount ++;
+    });
+    var result = await http.get(Uri.parse('https://codingapple1.github.io/app/more$requestCount.json'));
+
+    if(result.statusCode == 200) {
+      setState(() {
+        posts.add(jsonDecode(result.body));
+      });
+    } else {
+      showToast('데이터 요청 실패');
       throw Exception('요청 실패');
     }
   }
@@ -102,7 +121,7 @@ class _MyAppState extends State<MyApp> {
       ),
       body: Container(
         margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
-        child: [Home(posts:posts, setIsScrollForward: setIsScrollForward), Shop()][currentTabIndex],
+        child: [Home(posts:posts, setIsScrollForward: setIsScrollForward, getMorePosts: getMorePosts), Shop()][currentTabIndex],
       ),
       // 플러터에서 탭 구현하기
       bottomNavigationBar: isScrollForward ? BottomNavigationBar(
@@ -122,10 +141,11 @@ class _MyAppState extends State<MyApp> {
 }
 
 class Home extends StatefulWidget {
-  Home({Key? key, this.posts, this.setIsScrollForward}) : super(key: key);
+  Home({Key? key, this.posts, this.setIsScrollForward, this.getMorePosts}) : super(key: key);
 
   final posts;
   final setIsScrollForward;
+  final getMorePosts;
 
   @override
   State<Home> createState() => _HomeState();
@@ -143,6 +163,7 @@ class _HomeState extends State<Home> {
     // 왼쪽의 변수가 변할 때마다 특정 코드를 실행시키고 싶다면 리스너 사용하셈
     scroll.addListener(() {
       if(scroll.position.pixels == scroll.position.maxScrollExtent) {
+        widget.getMorePosts();
         print('끝');
       }
       widget.setIsScrollForward(scroll.position.userScrollDirection.toString());
