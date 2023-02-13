@@ -25,6 +25,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var currentTabIndex = 0;
   var posts = [];
+  var isScrollForward = true;
 
   void setCurrentTabIndex(int index) {
     setState(() {
@@ -34,6 +35,15 @@ class _MyAppState extends State<MyApp> {
   void setPosts(data) {
     setState(() {
       posts = data;
+    });
+  }
+  void setIsScrollForward(String direction) {
+    setState(() {
+      if(direction == 'ScrollDirection.forward') {
+        isScrollForward = true;
+      } else if(direction == 'ScrollDirection.reverse') {
+        isScrollForward = false;
+      }
     });
   }
 
@@ -92,10 +102,10 @@ class _MyAppState extends State<MyApp> {
       ),
       body: Container(
         margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
-        child: [Home(posts:posts), Shop()][currentTabIndex],
+        child: [Home(posts:posts, setIsScrollForward: setIsScrollForward), Shop()][currentTabIndex],
       ),
       // 플러터에서 탭 구현하기
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: isScrollForward ? BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
         // onPressed랑 똑같음
@@ -106,15 +116,16 @@ class _MyAppState extends State<MyApp> {
           BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: '홈'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: '샵'),
         ],
-      ),
+      ) : null,
       );
   }
 }
 
 class Home extends StatefulWidget {
-  Home({Key? key, this.posts}) : super(key: key);
+  Home({Key? key, this.posts, this.setIsScrollForward}) : super(key: key);
 
   final posts;
+  final setIsScrollForward;
 
   @override
   State<Home> createState() => _HomeState();
@@ -131,12 +142,10 @@ class _HomeState extends State<Home> {
 
     // 왼쪽의 변수가 변할 때마다 특정 코드를 실행시키고 싶다면 리스너 사용하셈
     scroll.addListener(() {
-      // 사용자의 스크롤 방향
-      print(scroll.position.userScrollDirection);
-      
       if(scroll.position.pixels == scroll.position.maxScrollExtent) {
-        print('끝임 ㅋ');
+        print('끝');
       }
+      widget.setIsScrollForward(scroll.position.userScrollDirection.toString());
     });
   }
   
