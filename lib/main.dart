@@ -90,10 +90,10 @@ class _MyAppState extends State<MyApp> {
           )
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-          child: [Home(posts:posts), Shop()][currentTabIndex]
-        ),
+      body: Container(
+        margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
+        child: [Home(posts:posts), Shop()][currentTabIndex],
+      ),
       // 플러터에서 탭 구현하기
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
@@ -154,7 +154,7 @@ class _HomeState extends State<Home> {
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.shade300,
-                  offset: Offset(0, 0.5), //(x,y)
+                  offset: Offset(0, 0.6), //(x,y)
                   blurRadius: 6.0,
                 ),
               ],
