@@ -3,7 +3,6 @@ import 'package:study_flutter_2/styles/style.dart' as style;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter/rendering.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -113,7 +112,15 @@ class _MyAppState extends State<MyApp> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
             child: IconButton(
-              onPressed: (){},
+              onPressed: (){
+                // 내비게이터
+                // => 새로운 페이지가 기존 페이지 위에 덮어 씌어지는 것
+                // => 페이지들을 Stack으로 관리하기 때문에 뒤로가기 버튼이 동작함
+                // 여기서 context는 MaterialApp에 대한 정보
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => Upload()
+                ));
+              },
               icon: Icon(Icons.add_box_outlined, color: Colors.black, size: 30,),
             ),
           )
@@ -243,6 +250,27 @@ class Shop extends StatelessWidget {
     return const Text('shop');
   }
 }
+
+class Upload extends StatelessWidget {
+  Upload({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('이미지 업로드 화면임'),
+          IconButton(onPressed: (){
+            Navigator.pop(context);
+          }, icon: Icon(Icons.close))
+        ],
+      ),
+    );
+  }
+}
+
 
 
 
