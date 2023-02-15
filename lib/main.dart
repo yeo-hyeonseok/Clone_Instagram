@@ -3,6 +3,8 @@ import 'package:study_flutter_2/styles/style.dart' as style;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 void main() {
   runApp(MaterialApp(
@@ -26,6 +28,7 @@ class _MyAppState extends State<MyApp> {
   var posts = [];
   var isScrollForward = true;
   var requestCount = 0;
+  late var galleryImage;
 
   void setCurrentTabIndex(int index) {
     setState(() {
@@ -46,6 +49,12 @@ class _MyAppState extends State<MyApp> {
       } else if(direction == 'ScrollDirection.reverse') {
         isScrollForward = false;
       }
+    });
+  }
+
+  void setGalleryImage(File path) {
+    setState(() {
+      galleryImage = path;
     });
   }
 
@@ -112,13 +121,23 @@ class _MyAppState extends State<MyApp> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
             child: IconButton(
-              onPressed: (){
+              onPressed: () async {
+                // 사용자의 갤러리에서 이미지를 가져오고 싶다면 image-picker
+                var picker = ImagePicker();
+                // 갤러리 대신 카메라를 띄우고 싶다면 imageSource.camera
+                // 여러 이미지를 고르고 싶다면 pickMultiImage()
+                // 이미지가 아니라 비디오를 고르고 싶다면 pickVideo() 쓰셈
+                var image = await picker.pickImage(source: ImageSource.gallery);
+                if(image != null) {
+                  setGalleryImage(File(image.path));
+                  print(galleryImage);
+                }
                 // 내비게이터
                 // => 새로운 페이지가 기존 페이지 위에 덮어 씌어지는 것
                 // => 페이지들을 Stack으로 관리하기 때문에 뒤로가기 버튼이 동작함
                 // 여기서 context는 MaterialApp에 대한 정보
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => Upload()
+                    builder: (context) => Upload(galleryImage:galleryImage)
                 ));
               },
               icon: Icon(Icons.add_box_outlined, color: Colors.black, size: 30,),
@@ -252,7 +271,9 @@ class Shop extends StatelessWidget {
 }
 
 class Upload extends StatelessWidget {
-  Upload({Key? key}) : super(key: key);
+  Upload({Key? key, this.galleryImage}) : super(key: key);
+
+  final galleryImage;
 
   @override
   Widget build(BuildContext context) {
@@ -262,6 +283,8 @@ class Upload extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('이미지 업로드 화면임'),
+          Image.file(galleryImage),
+          TextField(),
           IconButton(onPressed: (){
             Navigator.pop(context);
           }, icon: Icon(Icons.close))
