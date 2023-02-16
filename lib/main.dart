@@ -33,12 +33,6 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void setPosts(data) {
-    setState(() {
-      posts = data;
-    });
-  }
-
   void setIsScrollForward(String direction) {
     setState(() {
       if(direction == 'ScrollDirection.forward') {
@@ -67,18 +61,20 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  getPosts() async {
+  void getPosts() async {
     var result = await http.get(Uri.parse('https://codingapple1.github.io/app/data.json'));
 
     if (result.statusCode == 200) {
-      setPosts(jsonDecode(result.body));
+      setState(() {
+        posts = jsonDecode(result.body);
+      });
     } else {
       showToast('데이터 요청 실패');
       throw Exception('요청 실패');
     }
   }
 
-  getMorePosts() async {
+  void getMorePosts() async {
     setState(() {
       requestCount ++;
     });
@@ -92,6 +88,12 @@ class _MyAppState extends State<MyApp> {
       showToast('데이터 요청 실패');
       throw Exception('요청 실패');
     }
+  }
+
+  void addPost(post) {
+    setState(() {
+      posts.insert(0, post);
+    });
   }
 
   @override
@@ -121,7 +123,7 @@ class _MyAppState extends State<MyApp> {
                 }
 
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => Upload(galleryImage:galleryImage)
+                    builder: (context) => Upload(galleryImage:galleryImage, addPost: addPost, postId: posts.length + 1)
                 ));
               },
               icon: Icon(Icons.add_box_outlined, color: Colors.black, size: 30,),
@@ -201,7 +203,9 @@ class _HomeState extends State<Home> {
             ),
             child: Column(
               children: [
-                Image.network(widget.posts[index]['image'],width: double.infinity, height: 280, fit: BoxFit.cover,),
+                widget.posts[index]['image'].runtimeType.toString() == '_File' ?
+                  Image.file(widget.posts[index]['image'],width: double.infinity, height: 280, fit: BoxFit.cover,) :
+                  Image.network(widget.posts[index]['image'],width: double.infinity, height: 280, fit: BoxFit.cover,),
                 Padding(padding: EdgeInsets.fromLTRB(10, 15, 10, 15), child: Column(
                   children: [
                     Row(
@@ -254,10 +258,19 @@ class Shop extends StatelessWidget {
   }
 }
 
-class Upload extends StatelessWidget {
-  Upload({Key? key, this.galleryImage}) : super(key: key);
+class Upload extends StatefulWidget {
+  Upload({Key? key, this.galleryImage, this.addPost, this.postId}) : super(key: key);
 
   final galleryImage;
+  final addPost;
+  final postId;
+
+  @override
+  State<Upload> createState() => _UploadState();
+}
+
+class _UploadState extends State<Upload> {
+  var textValue = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -280,9 +293,10 @@ class Upload extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(0, 0, 0, 15),
               width: double.infinity,
               height: 280,
-              child: Image.file(galleryImage, width: double.infinity, height: 200, fit: BoxFit.cover,),
+              child: Image.file(widget.galleryImage, width: double.infinity, height: 200, fit: BoxFit.cover,),
             ),
             TextField(
+              controller: textValue,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -298,7 +312,17 @@ class Upload extends StatelessWidget {
                 width: double.infinity,
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    widget.addPost({
+                      "id": widget.postId,
+                      "image": widget.galleryImage,
+                      "likes": 0,
+                      "date": DateTime.now(),
+                      "content": textValue.text,
+                      "user": '차무식'
+                    });
+                    Navigator.pop(context);
+                  },
                   child: Text('게시글 올리기',
                     style: TextStyle(
                       color: Colors.white,
