@@ -8,9 +8,6 @@ import 'dart:io';
 
 void main() {
   runApp(MaterialApp(
-    // 스타일을 미리 지정해두고 전역적으로 적용시키려면 ThemeData
-    // 웹개발로 치면 <style> 또는 css파일
-    // but 위젯 하위에 존재하는 요소들은 적용 안될 수 있음 => 위젯은 자기랑 가까운 스타일을 우선적으로 따름
     theme: style.theme,
     home: MyApp(),
   ));
@@ -71,9 +68,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   getPosts() async {
-    // 플러터에서 http 통신하는 법
-    // 얘도 Future를 반환하는 함수임
-    // http 말고 dio 패키지도 한번 써보셈, 예외처리 하기 쉬움
     var result = await http.get(Uri.parse('https://codingapple1.github.io/app/data.json'));
 
     if (result.statusCode == 200) {
@@ -99,10 +93,7 @@ class _MyAppState extends State<MyApp> {
       throw Exception('요청 실패');
     }
   }
-  
-  // 위젯이 로드되면 동작할 내용 작성
-  // initState 안에서는 async await 사용 불가
-  // 쓰려면 따로 함수로 빼줘야 함
+
   @override
   void initState() {
     super.initState();
@@ -122,20 +113,13 @@ class _MyAppState extends State<MyApp> {
             padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
             child: IconButton(
               onPressed: () async {
-                // 사용자의 갤러리에서 이미지를 가져오고 싶다면 image-picker
                 var picker = ImagePicker();
-                // 갤러리 대신 카메라를 띄우고 싶다면 imageSource.camera
-                // 여러 이미지를 고르고 싶다면 pickMultiImage()
-                // 이미지가 아니라 비디오를 고르고 싶다면 pickVideo() 쓰셈
                 var image = await picker.pickImage(source: ImageSource.gallery);
                 if(image != null) {
                   setGalleryImage(File(image.path));
                   print(galleryImage);
                 }
-                // 내비게이터
-                // => 새로운 페이지가 기존 페이지 위에 덮어 씌어지는 것
-                // => 페이지들을 Stack으로 관리하기 때문에 뒤로가기 버튼이 동작함
-                // 여기서 context는 MaterialApp에 대한 정보
+
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => Upload(galleryImage:galleryImage)
                 ));
@@ -278,23 +262,61 @@ class Upload extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('이미지 업로드 화면임'),
-          Image.file(galleryImage),
-          TextField(),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text('게시글 작성하기'),
+        actions: [
           IconButton(onPressed: (){
             Navigator.pop(context);
-          }, icon: Icon(Icons.close))
+          }, icon: Icon(Icons.close, color: Colors.black, size: 30,))
         ],
+      ),
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(20, 15, 20, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 15),
+              width: double.infinity,
+              height: 280,
+              child: Image.file(galleryImage, width: double.infinity, height: 200, fit: BoxFit.cover,),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                hintText: '내용을 입력해주세요',
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              maxLines: 3,
+              keyboardType: TextInputType.multiline,
+            ),
+            Container(
+                width: double.infinity,
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                child: ElevatedButton(
+                  onPressed: (){},
+                  child: Text('게시글 올리기',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.redAccent
+                  ),
+                ),
+            )
+          ],
+        ),
       ),
     );
   }
 }
-
-
 
 
 
