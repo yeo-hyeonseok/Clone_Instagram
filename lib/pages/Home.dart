@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../pages/Profile.dart';
+import 'package:flutter/cupertino.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key, this.posts, this.setIsScrollForward, this.getMorePosts}) : super(key: key);
@@ -75,9 +77,24 @@ class _HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text('${widget.posts[index]['user']}', style: TextStyle(
-                              fontWeight: FontWeight.bold
-                          ),),
+                          // 일반 위젯에도 특정 이벤트에 따른 기능을 구현하고 싶다면 gestureDetector
+                          GestureDetector(
+                            // 페이지 전환 애니메이션 자유롭게 넣고 싶으며 PageRouteBuilder 쓰셈
+                            onTap: (){
+                              Navigator.push(context,
+                                PageRouteBuilder(
+                                  // a1 => animation object, 페이지 전환 경과 정보를 담고 있음 0~1
+                                  // a2 => animation object, 기존 페이지(덮여지는 페이지)에 애니메이션을 주고 싶을 때 사용함
+                                  pageBuilder: (context, a1, a2) => Profile(),
+                                  transitionsBuilder: (context, a1, a2, child) => FadeTransition(opacity: a1, child: child,),
+                                  transitionDuration: Duration(milliseconds: 150),
+                                )
+                              );
+                            },
+                            child: Text('${widget.posts[index]['user']}', style: TextStyle(
+                                fontWeight: FontWeight.bold
+                            ),),
+                          ),
                           Text('${widget.posts[index]['content']}')
                         ],
                       ),

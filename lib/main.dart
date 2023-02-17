@@ -6,9 +6,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'pages/shop.dart';
-import 'pages/home.dart';
-import 'pages/upload.dart';
+import 'pages/Shop.dart';
+import 'pages/Home.dart';
+import 'pages/Upload.dart';
 
 void main() {
   runApp(MaterialApp(
