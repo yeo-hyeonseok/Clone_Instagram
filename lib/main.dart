@@ -66,15 +66,31 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getPosts() async {
-    var result = await http.get(Uri.parse('https://codingapple1.github.io/app/data.json'));
+    var storage = await SharedPreferences.getInstance();
 
-    if (result.statusCode == 200) {
+    // 데이터가 이미 있으면
+    if(storage.getString('posts') != null) {
+      print('있음ㅋ');
+      var storageData = storage.getString('posts') ?? '없는데요';
+
       setState(() {
-        posts = jsonDecode(result.body);
+        posts = jsonDecode(storageData);
       });
     } else {
-      showToast('데이터 요청 실패');
-      throw Exception('요청 실패');
+      // 데이터가 없으면
+      var result = await http.get(Uri.parse('https://codingapple1.github.io/app/data.json'));
+
+      if (result.statusCode == 200) {
+        storage.setString('posts', result.body);
+        var storageData = storage.getString('posts') ?? '없는데요';
+
+        setState(() {
+          posts = jsonDecode(storageData);
+        });
+      } else {
+        showToast('데이터 요청 실패');
+        throw Exception('요청 실패');
+      }
     }
   }
 
@@ -98,39 +114,6 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       posts.insert(0, post);
     });
-  }
-
-  getStorage() async {
-    var storage = await SharedPreferences.getInstance();
-    return storage;
-  }
-
-  void saveData() async {
-    // 데이터를 반영구적으로 저장하고 싶다면 shared preference 쓰셈
-    // => 로컬 스토리지랑 비슷한 개념임
-    // => 유저가 캐시 삭제하지 않는 이상 계속 남아 있음
-    // => 서버 부하 감소 및 빠른 데이터 로드 가능
-    var storage = await SharedPreferences.getInstance();
-    
-    // 그냥 get과 getString의 차이는?
-    // 가져온 자료를 String 타입으로 가져옴
-    storage.setString('name', '차무식');
-
-    // Map 타입의 데이터를 저장하려면 Json으로 바꿔줘야 함
-    var temp = {'name': '차무식식'};
-    storage.setString('real_name', jsonEncode(temp));
-    
-    var result = storage.getString('real_name') ?? '없음';
-    
-    print(jsonDecode(result)['name']);
-  }
-  
-  void removeSaveData() async {
-    var storage = await SharedPreferences.getInstance();
-    
-    // shared preference에서 데이터 삭제하는 방법
-    storage.remove('name');
-    print(storage.getString('name'));
   }
 
   @override
@@ -161,7 +144,7 @@ class _MyAppState extends State<MyApp> {
                 }
 
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => Upload(galleryImage:galleryImage, addPost: addPost, postId: posts.length + 1)
+                    builder: (context) => Upload(galleryImage:galleryImage, addPost: addPost, postId: posts.length)
                 ));
               },
               icon: Icon(Icons.add_box_outlined, color: Colors.black, size: 30,),
@@ -179,7 +162,6 @@ class _MyAppState extends State<MyApp> {
         showUnselectedLabels: false,
         // onPressed랑 똑같음
         onTap: (index){
-          saveData();
           setCurrentTabIndex(index);
         },
         items: [
