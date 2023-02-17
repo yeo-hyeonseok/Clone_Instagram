@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/shop.dart';
 import 'pages/home.dart';
 import 'pages/upload.dart';
@@ -99,6 +100,39 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  getStorage() async {
+    var storage = await SharedPreferences.getInstance();
+    return storage;
+  }
+
+  void saveData() async {
+    // 데이터를 반영구적으로 저장하고 싶다면 shared preference 쓰셈
+    // => 로컬 스토리지랑 비슷한 개념임
+    // => 유저가 캐시 삭제하지 않는 이상 계속 남아 있음
+    // => 서버 부하 감소 및 빠른 데이터 로드 가능
+    var storage = await SharedPreferences.getInstance();
+    
+    // 그냥 get과 getString의 차이는?
+    // 가져온 자료를 String 타입으로 가져옴
+    storage.setString('name', '차무식');
+
+    // Map 타입의 데이터를 저장하려면 Json으로 바꿔줘야 함
+    var temp = {'name': '차무식식'};
+    storage.setString('real_name', jsonEncode(temp));
+    
+    var result = storage.getString('real_name') ?? '없음';
+    
+    print(jsonDecode(result)['name']);
+  }
+  
+  void removeSaveData() async {
+    var storage = await SharedPreferences.getInstance();
+    
+    // shared preference에서 데이터 삭제하는 방법
+    storage.remove('name');
+    print(storage.getString('name'));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -120,6 +154,7 @@ class _MyAppState extends State<MyApp> {
               onPressed: () async {
                 var picker = ImagePicker();
                 var image = await picker.pickImage(source: ImageSource.gallery);
+
                 if(image != null) {
                   setGalleryImage(File(image.path));
                   print(galleryImage);
@@ -144,6 +179,7 @@ class _MyAppState extends State<MyApp> {
         showUnselectedLabels: false,
         // onPressed랑 똑같음
         onTap: (index){
+          saveData();
           setCurrentTabIndex(index);
         },
         items: [
