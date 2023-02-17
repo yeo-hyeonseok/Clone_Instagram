@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../pages/Profile.dart';
-import 'package:flutter/cupertino.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key, this.posts, this.setIsScrollForward, this.getMorePosts}) : super(key: key);

@@ -9,11 +9,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/Shop.dart';
 import 'pages/Home.dart';
 import 'pages/Upload.dart';
+import 'package:provider/provider.dart';
+import 'store/store.dart';
 
 void main() {
-  runApp(MaterialApp(
-    theme: style.theme,
-    home: MyApp(),
+  // store 사용하는 방법 => 사용하길 원하는 위젯을 ChangeNotifierProvider으로 감싸주면 됨
+  runApp(ChangeNotifierProvider(
+    create: (context) => Store1(),
+    child: MaterialApp(
+      theme: style.theme,
+      home: MyApp(),
+    ),
   ));
 }
 
