@@ -280,8 +280,16 @@ class _UploadState extends State<Upload> {
         title: Text('게시글 작성하기'),
         actions: [
           IconButton(onPressed: (){
+            widget.addPost({
+              "id": widget.postId,
+              "image": widget.galleryImage,
+              "likes": 0,
+              "date": DateTime.now(),
+              "content": textValue.text,
+              "user": '차무식'
+            });
             Navigator.pop(context);
-          }, icon: Icon(Icons.close, color: Colors.black, size: 30,))
+          }, icon: Icon(Icons.send, color: Colors.black, size: 28,))
         ],
       ),
       body: Padding(
@@ -310,20 +318,12 @@ class _UploadState extends State<Upload> {
             ),
             Container(
                 width: double.infinity,
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: ElevatedButton(
                   onPressed: (){
-                    widget.addPost({
-                      "id": widget.postId,
-                      "image": widget.galleryImage,
-                      "likes": 0,
-                      "date": DateTime.now(),
-                      "content": textValue.text,
-                      "user": '차무식'
-                    });
                     Navigator.pop(context);
                   },
-                  child: Text('게시글 올리기',
+                  child: Text('취소',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
