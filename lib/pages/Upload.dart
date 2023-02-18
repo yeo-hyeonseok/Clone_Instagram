@@ -18,8 +18,18 @@ class _UploadState extends State<Upload> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            size: 30,
+            color: Colors.black,
+          ),
+        ),
         title: Text('게시글 작성하기'),
+        centerTitle: true,
         actions: [
           IconButton(onPressed: (){
             widget.addPost({
@@ -58,25 +68,6 @@ class _UploadState extends State<Upload> {
               maxLines: 3,
               keyboardType: TextInputType.multiline,
             ),
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: ElevatedButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                child: Text('취소',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.redAccent
-                ),
-              ),
-            )
           ],
         ),
       ),
