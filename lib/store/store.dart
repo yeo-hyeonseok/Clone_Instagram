@@ -4,4 +4,14 @@ import 'package:flutter/material.dart';
 class Store1 extends ChangeNotifier {
   var name = '차무식';
   var follower = 0;
+  var isFollowing = false;
+
+  void setFollower() {
+    !isFollowing ? follower -- : follower ++;
+    notifyListeners();
+  }
+
+  void setIsFollowing() {
+    isFollowing ? isFollowing = false : isFollowing = true;
+  }
 }

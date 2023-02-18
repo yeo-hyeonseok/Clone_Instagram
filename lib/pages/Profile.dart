@@ -23,10 +23,13 @@ class Profile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   child: Image.asset('assets/images/profile.jpg', width: 60, height: 60, fit: BoxFit.cover,),
                 ),
-                Text('팔로워 0명', style: TextStyle(
+                Text('팔로워 ${context.watch<Store1>().follower}명', style: TextStyle(
                   fontSize: 16
                 ),),
-                ElevatedButton(onPressed: (){}, child: Text('팔로우'))
+                ElevatedButton(onPressed: (){
+                  context.read<Store1>().setIsFollowing();
+                  context.read<Store1>().setFollower();
+                }, child: Text(context.watch<Store1>().isFollowing ? '팔로잉' : '팔로우'))
               ],
             )
           ],
