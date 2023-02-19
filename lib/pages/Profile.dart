@@ -47,14 +47,10 @@ class _ProfileState extends State<Profile> {
             ),
             SliverGrid(
               delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return Container(
-                      color: Colors.orange,
-                    );
-                  },
-                childCount: 3
+                  (context, index) => Image.network('${context.watch<store.Store1>().profileImages[index]}'),
+                  childCount: context.watch<store.Store1>().profileImages.length,
               ),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
             )
             // 그리드를 만들고 싶다면 GridView
             // 몇개의 그리드를 띄워야 할지 모르겠다면 GridView.builder
