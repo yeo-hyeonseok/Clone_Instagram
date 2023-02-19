@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../store/store.dart' as store;
+import '../components/ProfileHeader.dart';
 
 class Profile extends StatefulWidget {
   Profile({Key? key}) : super(key: key);
@@ -35,31 +36,33 @@ class _ProfileState extends State<Profile> {
         title: Text(context.watch<store.Store2>().name),
         centerTitle: true,
       ),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 60, height: 60,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/profile.jpg'),
-                  ),
-                ),
-                Text('팔로워 ${context.watch<store.Store1>().follower}명', style: TextStyle(
-                  fontSize: 16
-                ),),
-                ElevatedButton(onPressed: (){
-                  context.read<store.Store1>().setIsFollowing();
-                  context.read<store.Store1>().setFollower();
-                }, child: Text(context.watch<store.Store1>().isFollowing ? '팔로잉' : '팔로우'))
-              ],
+      // 스크롤 바가 필요하다면 CustomScrollView
+      body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                child: ProfileHeader(),
+              ),
+            ),
+            SliverGrid(
+              delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return Container(
+                      color: Colors.orange,
+                    );
+                  },
+                childCount: 3
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
             )
+            // 그리드를 만들고 싶다면 GridView
+            // 몇개의 그리드를 띄워야 할지 모르겠다면 GridView.builder
           ],
         ),
-      ),
     );
   }
 }
+
+
+
