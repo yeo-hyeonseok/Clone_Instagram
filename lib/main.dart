@@ -10,12 +10,15 @@ import 'pages/Shop.dart';
 import 'pages/Home.dart';
 import 'pages/Upload.dart';
 import 'package:provider/provider.dart';
-import 'store/store.dart';
+import 'store/store.dart' as store;
 
 void main() {
   // store 사용하는 방법 => 사용하길 원하는 위젯을 ChangeNotifierProvider으로 감싸주면 됨
-  runApp(ChangeNotifierProvider(
-    create: (context) => Store1(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => store.Store1()),
+      ChangeNotifierProvider(create: (context) => store.Store2()),
+    ],
     child: MaterialApp(
       theme: style.theme,
       home: MyApp(),
