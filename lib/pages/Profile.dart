@@ -29,9 +29,11 @@ class Profile extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Image.asset('assets/images/profile.jpg', width: 60, height: 60, fit: BoxFit.cover,),
+                SizedBox(
+                  width: 60, height: 60,
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/profile.jpg'),
+                  ),
                 ),
                 Text('팔로워 ${context.watch<Store1>().follower}명', style: TextStyle(
                   fontSize: 16
