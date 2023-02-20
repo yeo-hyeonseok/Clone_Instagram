@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../store/store.dart' as store;
-import '../components/ProfileHeader.dart';
+import '../components/profileHeader.dart';
 
 class Profile extends StatefulWidget {
   Profile({Key? key}) : super(key: key);

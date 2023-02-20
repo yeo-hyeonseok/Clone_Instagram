@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:study_flutter_2/styles/style.dart' as style;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'pages/Shop.dart';
-import 'pages/Home.dart';
-import 'pages/Upload.dart';
+import 'pages/shop.dart';
+import 'pages/home.dart';
+import 'pages/upload.dart';
 import 'package:provider/provider.dart';
 import 'store/store.dart' as store;
+import 'util/notification.dart';
 
 void main() {
   // store 사용하는 방법 => 사용하길 원하는 위젯을 ChangeNotifierProvider으로 감싸주면 됨
@@ -62,18 +62,6 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void showToast(String text) {
-    Fluttertoast.showToast(
-        msg: text,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.redAccent,
-        textColor: Colors.white,
-        fontSize: 14.0
-    );
-  }
-
   void getPosts() async {
     var storage = await SharedPreferences.getInstance();
 
@@ -97,7 +85,6 @@ class _MyAppState extends State<MyApp> {
           posts = jsonDecode(storageData);
         });
       } else {
-        showToast('데이터 요청 실패');
         throw Exception('요청 실패');
       }
     }
@@ -114,7 +101,6 @@ class _MyAppState extends State<MyApp> {
         posts.add(jsonDecode(result.body));
       });
     } else {
-      showToast('데이터 요청 실패');
       throw Exception('요청 실패');
     }
   }
@@ -129,6 +115,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
+    initNotification(context);
     getPosts();
   }
 
