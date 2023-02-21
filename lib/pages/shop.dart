@@ -6,8 +6,15 @@ class Shop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(onPressed: (){
-      showNotification();
-    }, child: Text('알림 띄워'));
+    return Column(
+      children: [
+        TextButton(onPressed: (){
+          showNotification();
+        }, child: Text('알림 바로 띄우기')),
+        TextButton(onPressed: (){
+          showNotification2();
+        }, child: Text('3초 후에 알림 띄우기')),
+      ],
+    );
   }
 }
