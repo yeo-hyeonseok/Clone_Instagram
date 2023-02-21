@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>95233541141-ovcjhvs16obvtleueaannrhbohdvqj62.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.95233541141-ovcjhvs16obvtleueaannrhbohdvqj62</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCC1f8hPf52saOV0OM5avsI52BvqlJBbVA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>95233541141</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.wilddevseok.finstagram</string>
+	<key>PROJECT_ID</key>
+	<string>flutterstudy2-631b2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>flutterstudy2-631b2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:95233541141:ios:5b55b5df164664441afa1c</string>
+</dict>
+</plist>

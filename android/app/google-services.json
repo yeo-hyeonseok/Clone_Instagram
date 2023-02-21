@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "95233541141",
+    "project_id": "flutterstudy2-631b2",
+    "storage_bucket": "flutterstudy2-631b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95233541141:android:6ce0a8c00ba5ef281afa1c",
+        "android_client_info": {
+          "package_name": "com.wilddevseok.finstagram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "95233541141-g96vbujj1neqmv4jal8edibmo1egbqi6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3LMu-Uz6C3clHjyOU0_f4mWGtAdB8bD8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "95233541141-g96vbujj1neqmv4jal8edibmo1egbqi6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "95233541141-ovcjhvs16obvtleueaannrhbohdvqj62.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wilddevseok.finstagram"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

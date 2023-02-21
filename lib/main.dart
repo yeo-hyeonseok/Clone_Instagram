@@ -11,8 +11,15 @@ import 'pages/upload.dart';
 import 'package:provider/provider.dart';
 import 'store/store.dart' as store;
 import 'util/notification.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   // store 사용하는 방법 => 사용하길 원하는 위젯을 ChangeNotifierProvider으로 감싸주면 됨
   runApp(MultiProvider(
     providers: [
