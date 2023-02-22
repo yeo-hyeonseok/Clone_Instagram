@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/shop.dart';
+import 'pages/homeLarge.dart';
 import 'pages/home.dart';
 import 'pages/upload.dart';
 import 'package:provider/provider.dart';
@@ -128,11 +129,24 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+
+    /* 현재 사용자 기기의 사이즈 가져올 수 있음 */
+    //MediaQuery.of(context).size.width;
+
+    /* 현재 '기기'의 윗 여백 알려줌 (애플리케이션 상 아님) => 기기마다 다르게 나올듯 */
+    //MediaQuery.of(context).padding.top;
+
+    /* 현재 기기의 해상도를 알 수 있음, 1LP 당 몇 px인지 => 3px 정도 이상이면 성능 높은 기기임 */
+    //MediaQuery.of(context).devicePixelRatio;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Instagram', style: TextStyle(
-          color: Colors.black
-        ),),
+        title: Text(
+          MediaQuery.of(context).size.width > 600 ? '지금 큰 화면임' : 'Instagram',
+          style: TextStyle(
+            color: Colors.black
+          ),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -157,7 +171,9 @@ class _MyAppState extends State<MyApp> {
       ),
       body: Container(
         margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
-        child: [Home(posts:posts, setIsScrollForward: setIsScrollForward, getMorePosts: getMorePosts), Shop()][currentTabIndex],
+        child: [
+          Home(posts:posts, setIsScrollForward: setIsScrollForward, getMorePosts: getMorePosts),
+          Shop()][currentTabIndex],
       ),
       // 플러터에서 탭 구현하기
       bottomNavigationBar: isScrollForward ? BottomNavigationBar(

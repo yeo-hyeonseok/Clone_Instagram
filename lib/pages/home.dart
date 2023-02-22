@@ -94,7 +94,12 @@ class _HomeState extends State<Home> {
                                 fontWeight: FontWeight.bold
                             ),),
                           ),
-                          Text('${widget.posts[index]['content']}')
+                          Text(
+                            '${widget.posts[index]['content']}',
+                            style: TextStyle(
+                              fontSize: MediaQuery.of(context).size.width > 600 ? 16 : 14,
+                            ),
+                          )
                         ],
                       ),
                     ),
