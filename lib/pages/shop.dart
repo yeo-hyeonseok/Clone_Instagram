@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+final auth = FirebaseAuth.instance;
 // firebase에서 데이터베이스 이용하는 방법
 final firestore = FirebaseFirestore.instance;
 
@@ -42,10 +44,50 @@ class _ShopState extends State<Shop> {
     }
   }
 
+  void userRegister() async {
+    try{
+      // 회원가입하기
+      var result = await auth.createUserWithEmailAndPassword(email: 'seok@test.com', password: '123456');
+
+      // 회원사입 시 사용자의 이름도 함께 등록하고 싶다면
+      result.user?.updateDisplayName('차무식');
+      print(result.user);
+    } catch(e) {
+      print(e);
+    }
+  }
+
+  // 로그인하기
+  void userLogin() async {
+    try{
+      await auth.signInWithEmailAndPassword(email: 'seok@test.com', password: '123456');
+    } catch(e) {
+      print(e);
+    }
+
+    // uid는 사용자의 고유한 아이디값임, 얘로 구별하면 됨
+    if(auth.currentUser?.uid == null) {
+      print('현재 로그인 안하심');
+    } else {
+      print('현재 로그인 하심');
+    }
+  }
+
+  void userLogout() async {
+    await auth.signOut();
+    // uid는 사용자의 고유한 아이디값임, 얘로 구별하면 됨
+    if(auth.currentUser?.uid == null) {
+      print('현재 로그인 안하심');
+    } else {
+      print('현재 로그인 하심');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    getData();
+    //userRegister();
+    userLogout();
   }
 
   @override
