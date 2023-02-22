@@ -30,8 +30,8 @@ class _ShopState extends State<Shop> {
       //await firestore.collection('product').doc('ofV8bLGlwZ3iCMngugFz').delete();
 
       /* 특정 document를 수정하고 싶다면 */
-      await firestore.collection('product').doc('z50SevnOadDOpamvvjSi').update(
-          {'name': '수정된 품목'});
+      /*await firestore.collection('product').doc('z50SevnOadDOpamvvjSi').update(
+          {'name': '수정된 품목'});*/
 
       for(var doc in result.docs) {
         print(doc['name']);
@@ -42,6 +42,11 @@ class _ShopState extends State<Shop> {
     } catch(e) {
       print(e);
     }
+  }
+
+  void updateData() async {
+    await firestore.collection('product').doc('UwJvaSxpeO2ktgZUIEnr').update(
+        {'name': '수정된 항목'});
   }
 
   void userRegister() async {
@@ -57,7 +62,6 @@ class _ShopState extends State<Shop> {
     }
   }
 
-  // 로그인하기
   void userLogin() async {
     try{
       await auth.signInWithEmailAndPassword(email: 'seok@test.com', password: '123456');
@@ -86,8 +90,10 @@ class _ShopState extends State<Shop> {
   @override
   void initState() {
     super.initState();
-    //userRegister();
-    userLogout();
+    //userLogin();
+    //userLogout();
+    //getData();
+    updateData();
   }
 
   @override
